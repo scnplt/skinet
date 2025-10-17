@@ -5,8 +5,10 @@ import { ProductDetailsComponent } from './features/shop/product-details/product
 import { TestErrorComponent } from './features/test-error/test-error.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
+import { CartComponent } from './features/cart/cart.component';
 
 export const routes: Routes = [
+    { path: 'cart', component: CartComponent },
     { path: 'shop/:id', component: ProductDetailsComponent },
     { path: 'shop', component: ShopComponent },
     { path: 'test-error', component: TestErrorComponent },
