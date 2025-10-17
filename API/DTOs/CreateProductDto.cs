@@ -13,7 +13,6 @@ public class CreateProductDto
     [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.01")]
     public decimal Price { get; set; }
 
-
     [Required]
     public string PictureUrl { get; set; } = string.Empty;
 

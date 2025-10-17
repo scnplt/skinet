@@ -12,17 +12,13 @@ public class ProductSpecParams
         get => _pageSize;
         set => _pageSize = (value > MAX_PAGE_SIZE) ? MAX_PAGE_SIZE : value;
     }
-    
 
     private List<string> _brands = [];
 
     public List<string> Brands
     {
         get => _brands;
-        set
-        {
-            _brands = value.SelectMany(q => q.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
-        }
+        set => _brands = [.. value.SelectMany(q => q.Split(',', StringSplitOptions.RemoveEmptyEntries))];
     }
 
     private List<string> _types = [];
@@ -30,10 +26,7 @@ public class ProductSpecParams
     public List<string> Types
     {
         get => _types;
-        set
-        {
-            _types = value.SelectMany(q => q.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
-        }
+        set => _types = [.. value.SelectMany(q => q.Split(',', StringSplitOptions.RemoveEmptyEntries))];
     }
 
     public string? Sort { get; set; }
@@ -44,5 +37,5 @@ public class ProductSpecParams
         get => _search ?? "";
         set => _search = value.ToLower();
     }
-    
+
 }
