@@ -5,7 +5,6 @@ import { MatCard } from '@angular/material/card';
 import { AccountService } from '../../../core/services/account.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../../core/services/snackbar.service';
-import { JsonPipe } from '@angular/common';
 import { TextInputComponent } from "../../../shared/components/text-input/text-input.component";
 
 @Component({
@@ -14,7 +13,6 @@ import { TextInputComponent } from "../../../shared/components/text-input/text-i
     ReactiveFormsModule,
     MatCard,
     MatButton,
-    JsonPipe,
     TextInputComponent
 ],
   templateUrl: './register.component.html',
