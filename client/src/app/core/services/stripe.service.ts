@@ -1,7 +1,7 @@
 import { StripeAddressElementOptions } from './../../../../node_modules/@stripe/stripe-js/dist/stripe-js/elements/address.d';
 import { CartService } from './cart.service';
 import { inject, Injectable } from '@angular/core';
-import { loadStripe, Stripe, StripeAddressElement, StripeElements } from '@stripe/stripe-js'
+import { loadStripe, Stripe, StripeAddressElement, StripeElements, StripePaymentElement } from '@stripe/stripe-js'
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Cart } from '../../shared/models/cart';
@@ -18,7 +18,8 @@ export class StripeService {
     private http = inject(HttpClient);
     private stripePromise: Promise<Stripe | null>;
     private elements?: StripeElements;
-    private addressElement?: StripeAddressElement
+    private addressElement?: StripeAddressElement;
+    private paymentElement?: StripePaymentElement;
 
     constructor() {
         this.stripePromise = loadStripe(environment.stripePublicKey);
@@ -42,10 +43,19 @@ export class StripeService {
         return this.elements;
     }
 
+    async createPaymentElement() {
+        if (!this.paymentElement) {
+            const elements = await this.initializeElements();
+            if (!elements) throw new Error('Elements instance has not been initialized');
+            this.paymentElement = elements.create('payment');
+        }
+        return this.paymentElement;
+    }
+
     async createAddressElement() {
         if (!this.addressElement) {
             const elements = await this.initializeElements();
-            if (!elements) throw new Error('Elements instance has not been loaded')
+            if (!elements) throw new Error('Elements instance has not been initialized')
 
             const user = this.accountService.currentUser();
             let defaultValues: StripeAddressElementOptions['defaultValues'] = {};
@@ -79,6 +89,7 @@ export class StripeService {
 
     disposeElements() {
         this.elements = undefined;
+        this.paymentElement = undefined;
         this.addressElement = undefined;
     }
 }
