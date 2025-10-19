@@ -1,7 +1,7 @@
 import { StripeAddressElementOptions } from './../../../../node_modules/@stripe/stripe-js/dist/stripe-js/elements/address.d';
 import { CartService } from './cart.service';
 import { inject, Injectable } from '@angular/core';
-import { loadStripe, Stripe, StripeAddressElement, StripeElements, StripePaymentElement } from '@stripe/stripe-js'
+import { ConfirmationToken, loadStripe, Stripe, StripeAddressElement, StripeElements, StripePaymentElement } from '@stripe/stripe-js'
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Cart } from '../../shared/models/cart';
@@ -85,6 +85,38 @@ export class StripeService {
                 return cart;
             })
         )
+    }
+
+    async createConfirmationToken() {
+        const stripe = await this.getStripeInstance();
+        const elements = await this.initializeElements();
+        const result = await elements.submit();
+
+        if (result.error) throw new Error(result.error.message);
+        if (!stripe) throw new Error('Stripe not available');
+
+        return await stripe.createConfirmationToken({ elements });
+    }
+
+    async confirmPayment(confirmationToken: ConfirmationToken) {
+        const stripe = await this.getStripeInstance();
+        const elements = await this.initializeElements();
+        const result = await elements.submit();
+
+        if (result.error) throw new Error(result.error.message);
+
+        const clientSecret = this.cartService.cart()?.clientSecret;
+        if (stripe && clientSecret) {
+            return await stripe.confirmPayment({
+                clientSecret: clientSecret,
+                confirmParams: {
+                    confirmation_token: confirmationToken.id
+                },
+                redirect: 'if_required'
+            });
+        } else {
+            throw new Error('Unable to load Stripe');
+        }
     }
 
     disposeElements() {
