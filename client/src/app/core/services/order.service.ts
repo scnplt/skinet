@@ -15,10 +15,10 @@ export class OrderService {
     }
 
     getOrdersForUser() {
-        return this.http.get<Order[]>(this.baseUrl + ' orders');
+        return this.http.get<Order[]>(this.baseUrl + 'orders');
     }
 
     getOrderDetailed(id: number) {
-        this.http.get<Order>(this.baseUrl + 'orders/' + id);
+        return this.http.get<Order>(this.baseUrl + 'orders/' + id);
     }
 }
