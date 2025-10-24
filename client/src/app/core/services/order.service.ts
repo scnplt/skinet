@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class OrderService {
     private baseUrl = environment.apiUrl;
     private http = inject(HttpClient);
+    orderComplete = false;
 
     createOrder(orderToCreate: OrderToCreate) {
         return this.http.post<Order>(this.baseUrl + 'orders', orderToCreate);
