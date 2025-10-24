@@ -8,6 +8,7 @@ export interface Order {
     paymentSummary: PaymentSummary,
     orderItems: OrderItem[],
     subtotal: number,
+    status: string,
     total: number,
     paymentIntentId: string
 }
